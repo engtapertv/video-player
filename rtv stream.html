@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <title>RTV Stream</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* cela visina ekrana */
+      background: #000;
+    }
+    .video-container {
+      width: 75%;      /* smanjena širina za dodatnih 5% */
+      height: 45%;     /* smanjena visina za dodatnih 3% da stanu oba */
+      margin: 1% 0;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* ceo video da se vidi */
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <video id="video1" controls autoplay muted playsinline></video>
+  </div>
+  <div class="video-container">
+    <video id="video2" controls autoplay muted playsinline></video>
+  </div>
+
+  <script>
+    function playStream(videoId, url) {
+      const video = document.getElementById(videoId);
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+      }
+    }
+
+    // RTV kanali
+    playStream("video1", "http://212.200.230.50:1935/RTV/rtv1/playlist.m3u8");
+    playStream("video2", "http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8");
+  </script>
+</body>
+</html>
